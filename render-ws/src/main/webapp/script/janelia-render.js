@@ -653,8 +653,8 @@ JaneliaRenderServiceDataUI.prototype.getStackSummaryHtml = function(ownerUrl, st
             if(!("OpenseadragonData" in stackInfo)){
 
                 // linksHtml = linksHtml + ' <a target="_blank" href="' + openseadragonUrl + '">Prepare data for Openseadragon</a>';
-                linksHtml = linksHtml + '<a href="" class="btn" id="sukesh">Prepare Data for Openseadragon</a>';
-
+               // linksHtml = linksHtml + '<a href="" class="btn" onclick="return check()">Prepare Data for Openseadragon</a>';
+                    linksHtml = linksHtml + '<button id="myBtn">Open Modal</button>';
             }
             else{
                 linksHtml = linksHtml + ' <a target="_blank" href="' + openseadragonUrl + '">Openseadragon Test</a>';
