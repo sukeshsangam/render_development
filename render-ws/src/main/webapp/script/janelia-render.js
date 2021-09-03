@@ -654,7 +654,7 @@ JaneliaRenderServiceDataUI.prototype.getStackSummaryHtml = function(ownerUrl, st
 
                 // linksHtml = linksHtml + ' <a target="_blank" href="' + openseadragonUrl + '">Prepare data for Openseadragon</a>';
                 linksHtml = linksHtml + '<div >'+
-                                        '<a class="" data-toggle="modal" data-target="#myModal">Prepare Data for Openseadragon</a>'+
+                                        '<a class=""  data-target="#myModal">Prepare Data for Openseadragon</a>'+
                                         '<div class="modal fade" id="myModal" role="dialog">'+
                                         '<div class="modal-dialog">'+
                                         '<div class="modal-content">'+
