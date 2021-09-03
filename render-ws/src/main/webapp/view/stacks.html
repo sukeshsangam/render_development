@@ -4,9 +4,6 @@
 
     <meta charset="utf-8">
     <title>Project Stacks</title>
-    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
-    <link rel="stylesheet" media="screen" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css' />
-
 
     <link rel="stylesheet" href="../css/render.css?v=20180427_001">
 
@@ -18,27 +15,31 @@
 
 
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <script type="text/javascript">
-        $( document ).ready(function() {
+     //   $( document ).ready(function() {
 
 
-            $("#stackInfo").tablesorter( { } );
+       //     $("#stackInfo").tablesorter( { } );
 
             //noinspection JSUnusedLocalSymbols
-            var stacksUi = new RenderWebServiceProjectStacks('renderStackOwner', 'renderStackProject', 'message', 'urlToView');
+         //   var stacksUi = new RenderWebServiceProjectStacks('renderStackOwner', 'renderStackProject', 'message', 'urlToView');
 
 
-        });
+       // });
 
 
         jQuery(document).ready(function() {
  // executes when HTML-Document is loaded and DOM is ready
 console.log("document is ready");
+$("#stackInfo").tablesorter( { } );
+
+            //noinspection JSUnusedLocalSymbols
+            var stacksUi = new RenderWebServiceProjectStacks('renderStackOwner', 'renderStackProject', 'message', 'urlToView');
 
 
   jQuery('.btn[href^=#]').click(function(e){
