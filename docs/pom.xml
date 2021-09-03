@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>modules-root</artifactId>
+        <groupId>org.janelia.render</groupId>
+        <version>2.3.0</version>
+    </parent>
+
+    <name>Render Documents</name>
+    <description>Render Toolkit documentation.</description>
+    <artifactId>docs</artifactId>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <!-- explicitly reference desired Guava version here to override older version brought in by swagger2markup library -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.robwin</groupId>
+            <artifactId>swagger2markup</artifactId>
+            <version>0.9.2</version>
+        </dependency>
+
+    </dependencies>
+
+    <!--
+      Administrative elements required by org.scijava.maven.plugin.enforcer.RequireElements
+      that have to be copied.  Too bad they can't just be taken from parent pom.
+    -->
+    <url>https://github.com/sukeshsangam/render</url>
+    <inceptionYear>2014</inceptionYear>
+    <organization><name>see parent</name></organization>
+    <licenses><license><name>see parent</name></license></licenses>
+    <developers><developer><name>see parent</name></developer></developers>
+    <contributors><contributor><name>see parent</name></contributor></contributors>
+    <mailingLists><mailingList><name>None</name></mailingList></mailingLists>
+    <scm><tag>see parent</tag></scm>
+    <issueManagement><system>see parent</system></issueManagement>
+    <ciManagement><system>see parent</system></ciManagement>
+    <properties>
+        <license.licenseName>gpl_v2</license.licenseName>
+        <license.copyrightOwners>Howard Hughes Medical Institute</license.copyrightOwners>
+    </properties>
+
+</project>

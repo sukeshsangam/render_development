@@ -1,0 +1,261 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>modules-root</artifactId>
+        <groupId>org.janelia.render</groupId>
+        <version>2.3.0</version>
+    </parent>
+
+    <name>Render Web Service</name>
+    <description>Render web service components.</description>
+    <artifactId>render-ws</artifactId>
+    <packaging>war</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <packagingExcludes>WEB-INF/lib/log4j*.jar</packagingExcludes>
+                    <attachClasses>true</attachClasses>
+                    <classesClassifier>classes</classesClassifier>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <!--
+                  See https://github.com/ktoso/maven-git-commit-id-plugin/tree/ed4a76ace5b269e08cd51b603d0efca206c89d71
+                  for plugin details.
+                 -->
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.1.13</version> <!-- using slightly older version that works with maven 3.0 -->
+                <executions>
+                    <execution>
+                        <id>get-git-info</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                    <verbose>false</verbose>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+                    <format>properties</format> <!-- Valid options are "properties" (default) and "json". -->
+                    <excludeProperties>
+                        <!-- filter out email address info just in case -->
+                        <excludeProperty>git.commit.user.email</excludeProperty>
+                        <excludeProperty>git.build.user.email</excludeProperty>
+                    </excludeProperties>
+                </configuration>
+
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.janelia.render</groupId>
+            <artifactId>render-app</artifactId>
+            <version>${render-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <version>${resteasy.version}</version>
+            <!-- filter out unwanted jars -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-httpclient</groupId>
+                    <artifactId>commons-httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>tjws</groupId>
+                    <artifactId>webserver</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+                <!-- covered by jakarta.xml.bind in jackson -->
+                <exclusion>
+                    <groupId>org.jboss.spec.javax.xml.bind</groupId>
+                    <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
+                </exclusion>
+                <!-- covered by javax.validation in swagger and spark -->
+                <exclusion>
+                    <groupId>jakarta.validation</groupId>
+                    <artifactId>jakarta.validation-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-servlet-initializer</artifactId>
+            <version>${resteasy.version}</version>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.resteasy</groupId>-->
+            <!--<artifactId>resteasy-jaxb-provider</artifactId>-->
+            <!--<version>${resteasy.version}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.resteasy</groupId>-->
+            <!--<artifactId>resteasy-jettison-provider</artifactId>-->
+            <!--<version>${resteasy.version}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.resteasy</groupId>-->
+            <!--<artifactId>resteasy-jackson2-provider</artifactId>-->
+            <!--<version>${resteasy.version}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.resteasy</groupId>-->
+            <!--<artifactId>resteasy-servlet-initializer</artifactId>-->
+            <!--<version>${resteasy.version}</version>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>${jackson-version}</version>
+            <exclusions>
+                <!-- covered by javax.activation in swagger, spark, and mock-server -->
+                <exclusion>
+                    <groupId>jakarta.activation</groupId>
+                    <artifactId>jakarta.activation-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlets</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.10.0</version>
+        </dependency>
+
+        <!-- override project dependency with provided scope since logback should be installed into jetty directly -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-jaxrs</artifactId>
+            <version>${swagger-version}</version>
+            <exclusions>
+                <!-- filter out slf4j jar so that it does not conflict with jetty version -->
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <!-- filter out old jax-rs v1 jar so that it does not conflict with resteasy's jax-rs v2 version -->
+                <exclusion>
+                    <groupId>javax.ws.rs</groupId>
+                    <artifactId>jsr311-api</artifactId>
+                </exclusion>
+                <!-- filter out com.google.code.findbugs:annotations so that it does not conflict with net.jcip:jcip-annotations (from resteasy) -->
+                <exclusion>
+                    <groupId>com.google.code.findbugs</groupId>
+                    <artifactId>annotations</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>ar.com.hjg</groupId>
+            <artifactId>pngj</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+
+        <!--
+             NOTE:
+             It is important that this flapdoodle dependency (for testing) is
+             listed after the swagger dependencies above.
+             Swagger currently requires a newer version of commons-lang3 than flapdoodle.
+        -->
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <version>2.2.0</version> <!-- NOTE: versions 2.0+ depend upon java 8 -->
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <properties>
+        <resteasy.version>3.13.2.Final</resteasy.version>
+        <jetty.version>9.4.43.v20210629</jetty.version> <!-- NOTE: jetty version should be kept in sync with values in render/Dockerfile and render/render-ws/src/main/scripts/install.sh -->
+        <license.licenseName>gpl_v2</license.licenseName>
+        <license.copyrightOwners>Howard Hughes Medical Institute</license.copyrightOwners>
+    </properties>
+
+    <!--
+      Administrative elements required by org.scijava.maven.plugin.enforcer.RequireElements
+      that have to be copied.  Too bad they can't just be taken from parent pom.
+    -->
+    <url>https://github.com/sukeshsangam/render</url>
+    <inceptionYear>2014</inceptionYear>
+    <organization><name>see parent</name></organization>
+    <licenses><license><name>see parent</name></license></licenses>
+    <developers><developer><name>see parent</name></developer></developers>
+    <contributors><contributor><name>see parent</name></contributor></contributors>
+    <mailingLists><mailingList><name>None</name></mailingList></mailingLists>
+    <scm><tag>see parent</tag></scm>
+    <issueManagement><system>see parent</system></issueManagement>
+    <ciManagement><system>see parent</system></ciManagement>
+
+</project>

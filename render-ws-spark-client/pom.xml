@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>modules-root</artifactId>
+        <groupId>org.janelia.render</groupId>
+        <version>2.3.0</version>
+    </parent>
+
+    <name>Render Web Service Spark Client</name>
+    <description>Spark clients that utilize (remote) render web service APIs.</description>
+    <artifactId>render-ws-spark-client</artifactId>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>1.7.1</version>
+
+                <executions>
+                    <execution>
+                        <id>shade-standalone</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+
+                        <configuration>
+
+                            <outputFile>target/${project.artifactId}-${project.version}-standalone.jar</outputFile>
+
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                                <!-- not sure if this filter is needed ...
+                                <filter>
+                                    <artifact>sc.fiji</artifact>
+                                    <excludes>
+                                        <exclude>lenscorrection/NonLinearTransform.class</exclude>
+                                    </excludes>
+                                </filter>
+                                -->
+                            </filters>
+
+                            <artifactSet>
+                               <excludes>
+                                   <exclude>jama:*</exclude>
+                                   <exclude>*hadoop*</exclude>
+                                   <exclude>*spark*</exclude>
+                                </excludes>
+                            </artifactSet>
+
+                        </configuration>
+
+                    </execution>
+
+                </executions>
+
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.janelia.render</groupId>
+            <artifactId>render-ws-java-client</artifactId>
+            <version>${render-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_2.12</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+            <exclusions>
+                <!-- filter out dependencies that cause duplicate class failures -->
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.glassfish.hk2.external</groupId>
+                    <artifactId>aopalliance-repackaged</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.glassfish.hk2.external</groupId>
+                    <artifactId>jakarta.inject</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.glassfish.hk2.external</groupId>
+                    <artifactId>javax.inject</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.glassfish.jersey.core</groupId>
+                    <artifactId>jersey-client</artifactId>
+                </exclusion>
+
+                <!-- filter out jersey-common dependency that produces invalid bytecode error -->
+                <exclusion>
+                    <groupId>org.glassfish.jersey.core</groupId>
+                    <artifactId>jersey-common</artifactId>
+                </exclusion>
+
+            </exclusions>
+        </dependency>
+
+        <!-- explicitly reference desired Guava version here to override older version brought in by hadoop libraries -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <!-- explicitly reference newer hadoop libraries to work around Guava version conflict that causes StopWatch.<init> IllegalAccessError -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>2.7.2</version>
+            <scope>provided</scope>
+            <exclusions>
+                <!-- filter out dependencies that cause duplicate class failures -->
+                <exclusion>
+                    <groupId>com.sun.jersey</groupId>
+                    <artifactId>jersey-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.jersey</groupId>
+                    <artifactId>jersey-server</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-configuration</groupId>
+                    <artifactId>commons-configuration</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
+
+        </dependency>
+
+        <!-- explicitly reference newer hadoop libraries to work around Guava version conflict that causes StopWatch.<init> IllegalAccessError -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-mapreduce-client-core</artifactId>
+            <version>2.7.2</version>
+            <scope>provided</scope>
+            <exclusions>
+                <!-- filter out dependencies that cause duplicate class failures -->
+                <exclusion>
+                    <groupId>com.sun.jersey</groupId>
+                    <artifactId>jersey-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.jersey</groupId>
+                    <artifactId>jersey-server</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
+
+    <!--
+      Administrative elements required by org.scijava.maven.plugin.enforcer.RequireElements
+      that have to be copied.  Too bad they can't just be taken from parent pom.
+    -->
+    <url>https://github.com/sukeshsangam/render</url>
+    <inceptionYear>2014</inceptionYear>
+    <organization><name>see parent</name></organization>
+    <licenses><license><name>see parent</name></license></licenses>
+    <developers><developer><name>see parent</name></developer></developers>
+    <contributors><contributor><name>see parent</name></contributor></contributors>
+    <mailingLists><mailingList><name>None</name></mailingList></mailingLists>
+    <scm><tag>see parent</tag></scm>
+    <issueManagement><system>see parent</system></issueManagement>
+    <ciManagement><system>see parent</system></ciManagement>
+    <properties>
+        <license.licenseName>gpl_v2</license.licenseName>
+        <license.copyrightOwners>Howard Hughes Medical Institute</license.copyrightOwners>
+    </properties>
+
+</project>

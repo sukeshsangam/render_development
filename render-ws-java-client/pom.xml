@@ -1,0 +1,142 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>modules-root</artifactId>
+        <groupId>org.janelia.render</groupId>
+        <version>2.3.0</version>
+    </parent>
+
+    <name>Render Web Service Java Client</name>
+    <description>Java clients that utilize (remote) render web service APIs.</description>
+    <artifactId>render-ws-java-client</artifactId>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>1.7.1</version>
+
+                <executions>
+                    <execution>
+                        <id>shade-standalone</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+
+                        <configuration>
+
+                            <outputFile>target/${project.artifactId}-${project.version}-standalone.jar</outputFile>
+
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.janelia.render.client.RenderClient</mainClass>
+                                </transformer>
+                            </transformers>
+
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>jama:*</exclude>
+                                </excludes>
+                            </artifactSet>
+
+                        </configuration>
+
+                    </execution>
+                    
+                </executions>
+
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.janelia.render</groupId>
+            <artifactId>render-app</artifactId>
+            <version>${render-version}</version>
+        </dependency>
+
+        <!-- SciJava Dependencies -->
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
+        <!-- Overridden SciJava Dependencies -->
+
+        <dependency>
+            <groupId>jitk</groupId>
+            <artifactId>jitk-tps</artifactId>
+            <version>${jitk-tps-with-mpicbg.version}</version>
+        </dependency>
+
+        <!-- Dependencies not defined in SciJava -->
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-tiff</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>au.com.bytecode</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>2.4</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.mock-server</groupId>
+            <artifactId>mockserver-netty</artifactId>
+            <version>3.10.4</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <!--
+      Administrative elements required by org.scijava.maven.plugin.enforcer.RequireElements
+      that have to be copied.  Too bad they can't just be taken from parent pom.
+    -->
+    <url>https://github.com/sukeshsangam/render</url>
+    <inceptionYear>2014</inceptionYear>
+    <organization><name>see parent</name></organization>
+    <licenses><license><name>see parent</name></license></licenses>
+    <developers><developer><name>see parent</name></developer></developers>
+    <contributors><contributor><name>see parent</name></contributor></contributors>
+    <mailingLists><mailingList><name>None</name></mailingList></mailingLists>
+    <scm><tag>see parent</tag></scm>
+    <issueManagement><system>see parent</system></issueManagement>
+    <ciManagement><system>see parent</system></ciManagement>
+    <properties>
+        <license.licenseName>gpl_v2</license.licenseName>
+        <license.copyrightOwners>Howard Hughes Medical Institute</license.copyrightOwners>
+    </properties>
+
+</project>

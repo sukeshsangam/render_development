@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <title>Layer Tiles</title>
+
+    <script type="text/javascript" src="../script/jquery-2.1.1.min.js"></script>
+
+    <script type="text/javascript">
+
+        function setLayerMessage(message) {
+            $('#layerMessage').text(message);
+        }
+
+        function loadJSON(path, success, error) {
+
+            setLayerMessage("Loading " + path);
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        if (success) {
+                            success(JSON.parse(xhr.responseText));
+                        }
+                    } else if (error) {
+                        error(xhr);
+                    }
+                }
+            };
+
+            var nonCachedPath = path + "?t=" + new Date().getTime();
+            xhr.open("GET", nonCachedPath, true);
+            xhr.send();
+        }
+
+        function drawPolygon(polygon, color, canvas) {
+
+            var context = canvas.getContext('2d');
+
+            var point;
+            if (polygon.length > 1) {
+
+                point = polygon[0];
+
+                context.beginPath();
+                context.moveTo(point[0], point[1]);
+
+                for (var index = 1; index < polygon.length; index++) {
+                    point = polygon[index];
+                    context.lineTo(point[0], point[1]);
+                }
+
+                context.closePath();
+
+                // set line color
+                context.strokeStyle = '#000000';
+                context.stroke();
+
+                context.fillStyle = color;
+                context.fill();
+            }
+
+        }
+
+        function renderBounds() {
+            var colors = [ '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#00FFFF', '#FF00FF', '#C0C0C0' ];
+            var canvas = document.getElementById('canvasBox');
+
+            var index;
+            var tileBox;
+            for (index = 0; index < layer.tiles.length; index++) {
+                tileBox = layer.tiles[index].box;
+                drawPolygon(tileBox, colors[index % colors.length], canvas);
+            }
+        }
+
+        function saveTilesForLayer(data) {
+
+            setLayerMessage("Retrieved " + data.length + " tiles");
+
+            layer.tiles = data;
+
+            var zUrl = getZUrl();
+
+            var index;
+            var tile;
+            layer.minX = Number.MAX_VALUE;
+            layer.minY = Number.MAX_VALUE;
+            layer.maxX = 0;
+            layer.maxY = 0;
+            for (index = 0; index < data.length; index++) {
+                tile = data[index];
+                tile.scaledMinX = scale * tile.minX;
+                tile.scaledMinY = scale * tile.minY;
+                tile.scaledMaxX = scale * tile.maxX;
+                tile.scaledMaxY = scale * tile.maxY;
+                tile.box = [
+                    [tile.scaledMinX, tile.scaledMinY],
+                    [tile.scaledMaxX, tile.scaledMinY],
+                    [tile.scaledMaxX, tile.scaledMaxY],
+                    [tile.scaledMinX, tile.scaledMaxY],
+                    [tile.scaledMinX, tile.scaledMinY]
+                ];
+
+                addTileImage(tile, zUrl);
+
+                if (layer.minX > tile.minX) {
+                    layer.minX = tile.minX;
+                }
+                if (layer.minY > tile.minY) {
+                    layer.minY = tile.minY;
+                }
+                if (layer.maxX < tile.maxX) {
+                    layer.maxX = tile.maxX;
+                }
+                if (layer.maxY < tile.maxY) {
+                    layer.maxY = tile.maxY;
+                }
+            }
+
+            setLayerMessage("Layer: " + layer.tiles.length + " tiles, minX=" + layer.minX +
+                            ", minY=" + layer.minY + ", maxX=" + layer.maxX + ", maxY=" + layer.maxY);
+
+            setRenderedTileSize();
+
+            var canvas = document.getElementById('canvasBox');
+
+            if (canvas.getContext) {
+                var context = canvas.getContext('2d');
+                context.clearRect (0, 0, canvas.width, canvas.height);
+
+                canvas.height = (layer.maxY * scale) + 10;
+                canvas.width = (layer.maxX * scale) + 10;
+
+                var canvasDiv = $('#canvasDiv');
+                canvasDiv.height(canvas.height);
+                canvasDiv.width(canvas.width);
+
+                $('renderBoundsButton').prop('disabled', false);
+
+            } else {
+
+                $('renderBoundsButton').prop('disabled', true);
+
+                alert('You need an HTML5 compatible browser to draw tile bounds');
+            }
+
+        }
+
+        function addTileImage(tile, zUrl) {
+            var width = tile.maxX - tile.minX;
+            var height = tile.maxY - tile.minY;
+            var left = tile.scaledMinX + 8;
+            var top = tile.scaledMinY + 100;
+            // /box/{x},{y},{width},{height},{scale}/jpeg-image
+            tile.imageSrc = zUrl + "/box/" + tile.minX + "," + tile.minY + "," + width + "," + height + "," + scale + "/jpeg-image";
+            tile.image = '<img id="' + tile.tileId + '" src="' + tile.imageSrc +
+                         '" style="position: absolute; left: ' + left + 'px; top: ' + top + 'px;"/>';
+        }
+
+        function getSelectedValue(id) {
+            var select = document.getElementById(id);
+            return select.options[select.selectedIndex].value;
+        }
+
+        function getStackId() {
+            var stackIdIndex = getSelectedValue("stackId");
+            return stackIds[stackIdIndex];
+        }
+
+        function getZUrl() {
+            var sid = getStackId();
+            var z = getSelectedValue("z");
+            return baseUrl + "project/" + sid.project + "/stack/" + sid.stack + "/z/" + z;
+        }
+
+        function loadTileData() {
+            var jsonUrl = getZUrl() + "/tileBounds";
+            loadJSON(jsonUrl,
+                     function(data) { saveTilesForLayer(data); },
+                     function(xhr) { console.error(xhr); });
+        }
+
+        function updateZValues(data) {
+
+            var zSelect = $('#z');
+
+            zSelect.find('option').remove().end();
+
+            for (index = 0; index < data.length; index++) {
+                var z = data[index];
+                zSelect.append($('<option>', { value: z }).text(z));
+            }
+
+            zSelect.change(function() {
+                loadTileData()
+            });
+
+            if (data.length > 0) {
+                zSelect.val(data[0]);
+                zSelect.change();
+            }
+        }
+
+        function getStackIdName(stackId) {
+            return stackId.owner + "__" + stackId.project + "__" + stackId.stack;
+        }
+
+        function updateStackIds(data) {
+
+            stackIds = data;
+
+            var stackIdSelect = $('#stackId');
+
+            for (index = 0; index < stackIds.length; index++) {
+                var name = getStackIdName(stackIds[index]);
+                stackIdSelect.append($('<option>', { value : index }).text(name));
+            }
+
+            stackIdSelect.change(function() {
+                var sid = getStackId();
+                var zValuesUrl = baseUrl + "project/" + sid.project + "/stack/" + sid.stack + "/zValues";
+                loadJSON(zValuesUrl,
+                         function(data) { updateZValues(data); },
+                         function(xhr) { console.error(xhr); });
+            });
+
+            if (stackIds.length > 0) {
+                stackIdSelect.val(0);
+                stackIdSelect.change();
+            }
+        }
+
+        function renderTiles() {
+
+            setRenderedTileSize();
+
+            var zUrl = getZUrl();
+            var renderDiv = $('#renderDiv');
+            var imageId = 0;
+            var imageSrc;
+            var image;
+            var left;
+            var top;
+            var size = renderedTileSize;
+            for (x = 0; x < layer.maxX; x = x + size) {
+                for (y = 0; y < layer.maxY; y = y + size) {
+                    imageId++;
+                    left = 10 + (x * scale);
+                    top = 100 + (y * scale);
+                    imageSrc = zUrl + "/box/" + x + "," + y + "," + size + "," + size +"," + scale + "/jpeg-image";
+                    image = '<img id="i' + imageId + '" src="' + imageSrc +
+                            '" style="position: absolute; left: ' + left + 'px; top: ' + top + 'px;"/>';
+                    renderDiv.append(image);
+                }
+            }
+        }
+
+        function getColumnOrRowCount(maxValue, tileSize) {
+            var count = maxValue / tileSize;
+            if (count > Math.trunc(count)) {
+                count = Math.trunc(count) + 1;
+            }
+            return count;
+        }
+
+        function setRenderedTileSize() {
+            renderedTileSize = parseInt($('#renderedTileSize').val());
+            var numColumns = getColumnOrRowCount(layer.maxX, renderedTileSize);
+            var numRows = getColumnOrRowCount(layer.maxY, renderedTileSize);
+            var numTiles = numColumns * numRows;
+            $('#renderTilesButton').val("Render " + numTiles + " Tiles");
+        }
+
+        var baseUrl;
+        var stackIds;
+        var scale = 0.01;
+        var renderedTileSize;
+        var layer = {};
+
+        function initPage() {
+            // http://renderer.int.janelia.org:8080/render-ws/view/layer-tiles.html
+            var href = window.location.href;
+            var stopIndex = href.indexOf("/view/layer-tiles.html");
+            baseUrl = href.substring(0, stopIndex) + "/v1/owner/flyTEM/";
+            var stackIdsUrl = baseUrl + "stackIds";
+            loadJSON(stackIdsUrl,
+                     function(data) { updateStackIds(data); },
+                     function(xhr) { console.error(xhr); });
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+<script>
+    $(document).ready(initPage());
+</script>
+
+<div>
+    <form onsubmit="return false">
+        <label for="stackId" style="padding: 10px">StackId:</label><select id="stackId" name="stackId"></select>
+        <label for="z" style="padding: 10px">Z:</label><select id="z" name="z"></select>
+        <input id="renderBoundsButton" type="button" onclick="renderBounds(); return false" value="Render Bounds"/>
+        <label for="renderedTileSize" style="padding: 10px">Rendered Tile Size:</label>
+        <input id="renderedTileSize" type="number" min="1" max="100000" value="1000" onchange="setRenderedTileSize()">
+        <input id="renderTilesButton" type="button" onclick="renderTiles(); return false" value="Render Tiles"/>
+    </form>
+
+    <p id="layerMessage" style="padding: 10px"></p>
+</div>
+
+<div id="canvasDiv" style="margin-top: 10px; border: 1px solid black">
+    <canvas id="canvasBox"></canvas>
+</div>
+
+<div id="renderDiv">
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "width" : 2560,
+  "height" : 2160,
+  "doFilter" : true,
+  "tileSpecs" : [
+    {
+      "tileId" : "160102030405111111.99.0",
+      "layout" : {
+        "sectionId": "99.0"
+      },
+      "z" : 88.0,
+      "mipmapLevels": {
+        "0": {
+          "imageUrl": "src/test/resources/point-match-test/col0075_row0021_cam1.png",
+          "maskUrl": "src/test/resources/point-match-test/test_mask.jpg"
+        }
+      }
+    }
+  ]
+}
