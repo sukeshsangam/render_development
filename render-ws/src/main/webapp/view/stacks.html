@@ -19,18 +19,24 @@
 
     <script type="text/javascript">
         $( document ).ready(function() {
+            $(function () {
+        $("a[class='Openseadragon_a']").click(function () {
+            $("#MyPopup").modal("show");
+            alert("I am an alert box!");
+            return false;
+        });
+    });
+
+
             $("#stackInfo").tablesorter( { } );
 
             //noinspection JSUnusedLocalSymbols
             var stacksUi = new RenderWebServiceProjectStacks('renderStackOwner', 'renderStackProject', 'message', 'urlToView');
+
+
         });
 
-       $(function () {
-        $("a[class='Openseadragon_a']").click(function () {
-            $("#MyPopup").modal("show");
-            return false;
-        });
-    });
+
 
     </script>
 
