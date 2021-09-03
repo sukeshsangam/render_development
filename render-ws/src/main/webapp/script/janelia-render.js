@@ -653,37 +653,31 @@ JaneliaRenderServiceDataUI.prototype.getStackSummaryHtml = function(ownerUrl, st
             if(!("OpenseadragonData" in stackInfo)){
 
                 // linksHtml = linksHtml + ' <a target="_blank" href="' + openseadragonUrl + '">Prepare data for Openseadragon</a>';
-                linksHtml = linksHtml + '<div class="container"> \
-
-                                                                                     <a class="" data-toggle="modal" data-target="#myModal">Prepare Data for Openseadragon</a> \
-
-                                                                                     <!-- Modal --> \
-                                                                                     <div class="modal fade" id="myModal" role="dialog"> \
-                                                                                       <div class="modal-dialog"> \
-
-                                                                                         <!-- Modal content--> \
-                                                                                         <div class="modal-content"> \
-                                                                                           <div class="modal-header"> \
-                                                                                             <button type="button" class="close" data-dismiss="modal">&times;</button> \
-                                                                                             <h4 class="modal-title">Modal Header</h4> \
-                                                                                           </div> \
-                                                                                           <div class="modal-body"> \
-                                                                                             <form action="#"> \
-                                                                                     <label for="fname">First name:</label><br> \
-                                                                                     <input type="text" id="fname" name="fname"><br> \
-                                                                                     <label for="lname">Last name:</label><br> \
-                                                                                     <input type="text" id="lname" name="lname"> \
-                                                                                     <input type="submit" id="lname" name="lname"> \
-                                                                                   </form> \
-                                                                                           </div> \
-                                                                                           <div class="modal-footer"> \
-                                                                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> \
-                                                                                           </div> \
-                                                                                         </div> \
-                                                                                       </div> \
-                                                                                     </div> \
-
-                                                                                   </div>';
+                linksHtml = linksHtml + '<div class="container">'+
+                                        '<a class="" data-toggle="modal" data-target="#myModal">Prepare Data for Openseadragon</a>'+
+                                        '<div class="modal fade" id="myModal" role="dialog">'+
+                                        '<div class="modal-dialog">'+
+                                        '<div class="modal-content">'+
+                                        '<div class="modal-header">'+
+                                        '<button type="button" class="close" data-dismiss="modal">&times;</button>'+
+                                        '<h4 class="modal-title">Modal Header</h4>'+
+                                        '</div>'+
+                                        '<div class="modal-body">'+
+                                        '<form action="#">'+
+                                        '<label for="fname">First name:</label><br>'+
+                                        '<input type="text" id="fname" name="fname"><br>'+
+                                        '<label for="lname">Last name:</label><br>'+
+                                        '<input type="text" id="lname" name="lname">'+
+                                        '<input type="submit" id="lname" name="lname">'+
+                                        '</form>'+
+                                        '</div>'+
+                                        '<div class="modal-footer">'+
+                                        '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>'+
+                                        '</div>'+
+                                        '</div>'+
+                                        '</div>'+
+                                        '</div>'+
+                                        '</div>';
             }
             else{
                 linksHtml = linksHtml + ' <a target="_blank" href="' + openseadragonUrl + '">Openseadragon Test</a>';
