@@ -111,6 +111,45 @@ public class RenderDataService {
         return getLayoutFileForZRange(owner, project, stack, z, z, format, uriInfo);
     }
 
+
+    @Path("v1/testservice")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @ApiOperation(
+            tags = "test service",
+            value = "test service",
+            produces = MediaType.TEXT_PLAIN)
+    public Response testService() {
+
+       // LOG.info("getLayoutFileForZRange: entry, owner={}, project={}, stack={}, minZ={}, maxZ={}, format={}",
+         //       owner, project, stack, minZ, maxZ, format);
+
+        Response response = null;
+        //try {
+          //  final StackId stackId = new StackId(owner, project, stack);
+           // final StackMetaData stackMetaData = getStackMetaData(stackId);
+
+          //  final String requestUri = uriInfo.getRequestUri().toString();
+           // final String stackUri = "/stack/" + stack + "/";
+           // final int stackEnd = requestUri.indexOf(stackUri) + stackUri.length() - 1;
+          //  final String stackRequestUri = requestUri.substring(0, stackEnd);
+            final String responseOutput = "Sukesh";
+                    ///output -> renderDao.writeLayoutFileData(stackMetaData, stackRequestUri, minZ, maxZ, format, output);
+            response = Response.ok(responseOutput).build();
+        } catch (final Throwable t) {
+            RenderServiceUtil.throwServiceException(t);
+        }
+
+        return response;
+    }
+
+
+
+
+
+
+
+
     @Path("v1/owner/{owner}/project/{project}/stack/{stack}/zRange/{minZ},{maxZ}/layoutFile")
     @GET
     @Produces(MediaType.TEXT_PLAIN)

@@ -654,7 +654,7 @@ JaneliaRenderServiceDataUI.prototype.getStackSummaryHtml = function(ownerUrl, st
 
                 // linksHtml = linksHtml + ' <a target="_blank" href="' + openseadragonUrl + '">Prepare data for Openseadragon</a>';
                // linksHtml = linksHtml + '<a href="" class="btn" onclick="return check()">Prepare Data for Openseadragon</a>';
-                    linksHtml = linksHtml + '<button id="myBtn" onclick="testing();">Open Modal</button>';
+                    linksHtml = linksHtml + '<button id="myBtn" onclick="testing();">Prepare data for openseadragon</button>';
             }
             else{
                 linksHtml = linksHtml + ' <a target="_blank" href="' + openseadragonUrl + '">Openseadragon Test</a>';
