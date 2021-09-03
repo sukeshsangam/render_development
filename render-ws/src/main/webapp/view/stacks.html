@@ -4,10 +4,9 @@
 
     <meta charset="utf-8">
     <title>Project Stacks</title>
-    <script type="text/javascript" src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.3.min.js'></script>
     <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js'></script>
     <link rel="stylesheet" media="screen" href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css' />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
 
     <link rel="stylesheet" href="../css/render.css?v=20180427_001">
 
@@ -17,15 +16,15 @@
     <script type="text/javascript" src="../script/janelia-render.js?v=20180611_001"></script>
     <script type="text/javascript" src="../script/stacks.js?v=20180430_001"></script>
 
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
     <script type="text/javascript">
         $( document ).ready(function() {
-            $(function () {
-        $("a[class='Openseadragon_a']").click(function () {
-            $("#MyPopup").modal("show");
-            alert("I am an alert box!");
-            return false;
-        });
-    });
 
 
             $("#stackInfo").tablesorter( { } );
@@ -78,31 +77,42 @@
             </tr>
         </thead>
         <tbody>
-        <div id="MyPopup" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            &times;</button>
-                        <h4 class="modal-title">
-                            Greetings
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        Welcome to ASPSnippets.com
-                    </div>
-                    <div class="modal-footer">
-                        <input type="button" id="btnClosePopup" value="Close" class="btn btn-danger" data-dismiss="modal" />
-                    </div>
-                </div>
-            </div>
-        </div>
 
         </tbody>
     </table>
 
 </div>
 
+
+<div class="info-box">
+    <h3>M Saifur Rahman</h3>
+    <span class="instructor-profession">Director,Business Development</span>
+
+    <div class="divider"></div>
+
+
+    <center><button type="button" class="btn btn info btn-lg" data-toggle="modal" data-target="#myModal">Read More</button></center>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">M Saifur Rahman,PMP</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Here goes the body content</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
