@@ -106,7 +106,7 @@ public class TileDataService {
          //   RenderServiceUtil.throwServiceException(t);
        // }
 
-        return "Sukesh";
+        return clustername+" "+username+" "+password;
     }
 
 
