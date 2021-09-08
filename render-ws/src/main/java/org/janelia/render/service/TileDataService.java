@@ -85,16 +85,16 @@ public class TileDataService {
     }
 
     @Path("v1/testservice")
-    @GET
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(
             value = "Get test service")
     @ApiResponses(value = {
             @ApiResponse(code = 404, message = "test service not found"),
     })
-    public String getTileSpec(@PathParam("clustername") final String clustername,
-                                @PathParam("username") final String username,
-                                @PathParam("password") final String password) {
+    public String getTileSpec(@FormParam("clustername") final String clustername,
+                                @FormParam("username") final String username,
+                                @FormParam("password") final String password) {
 
         LOG.info("getTestService: entry, clustername={}, username={}, password={}",
                 clustername, username, password);
