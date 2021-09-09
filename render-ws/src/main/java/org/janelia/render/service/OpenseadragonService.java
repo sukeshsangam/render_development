@@ -63,22 +63,17 @@ public class OpenseadragonService {
     @ApiResponses(value = {
             @ApiResponse(code = 404, message = "test service not found"),
     })
-    public String getOpenseadragon(@FormParam("clustername") final String clustername,
+    public String getTestService(@FormParam("clustername") final String clustername,
                               @FormParam("username") final String username,
-                              @FormParam("password") final String password
-                              @FormParam("StackOwner") final String stackowner
-                              @FormParam("StackProject") final String stackproject
+                              @FormParam("password") final String password,
+                              @FormParam("StackOwner") final String stackowner,
+                              @FormParam("StackProject") final String stackproject,
                               @FormParam("Stack") final String stack) {
 
         LOG.info("getTestService: entry, clustername={}, username={}, password={}",
                 clustername, username, password);
 
-        //TileSpec tileSpec = null;
-        //try {
-        //   tileSpec = getTileSpec(owner, project, stack, tileId, false);
-        //} catch (final Throwable t) {
-        //   RenderServiceUtil.throwServiceException(t);
-        // }
+
 
         return clustername+" "+username+" "+password+" "+stackowner+" "+stackproject+" "+stack;
     }
