@@ -21,6 +21,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <script type="text/javascript">
+
+
+
+
      //   $( document ).ready(function() {
 
 
@@ -177,9 +181,12 @@ window.onclick = function(event) {
             <input type="hidden" id="StackProject" name="StackProject" >
             <input type="hidden" id="Stack" name="Stack" >
             <script>
-                document.getElementById("StackOwner").value = $('#renderStackOwner option:selected').text();
+            window.addEventListener("load", function() {
+   document.getElementById("StackOwner").value = $('#renderStackOwner option:selected').text();
                 document.getElementById("StackProject").value = $('#renderStackProject option:selected').text();
                 document.getElementById("Stack").value = $('#StackName').html();
+});
+
 
             </script>
         <input type="submit">
