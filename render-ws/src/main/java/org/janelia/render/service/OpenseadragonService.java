@@ -37,7 +37,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @Path("/")
-@Api(tags = {"Tile Data APIs"})
+@Api(tags = {"Openseadragon API's"})
 public class OpenseadragonService {
 
     private final RenderDao renderDao;
@@ -63,7 +63,7 @@ public class OpenseadragonService {
     @ApiResponses(value = {
             @ApiResponse(code = 404, message = "test service not found"),
     })
-    public String getTileSpec(@FormParam("clustername") final String clustername,
+    public String getOpenseadragon(@FormParam("clustername") final String clustername,
                               @FormParam("username") final String username,
                               @FormParam("password") final String password
                               @FormParam("StackOwner") final String stackowner
@@ -83,4 +83,5 @@ public class OpenseadragonService {
         return clustername+" "+username+" "+password+" "+stackowner+" "+stackproject+" "+stack;
     }
 
+    private static final Logger LOG = LoggerFactory.getLogger(OpenseadragonService.class);
 }
