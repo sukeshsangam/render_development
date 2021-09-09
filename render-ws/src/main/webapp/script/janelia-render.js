@@ -639,7 +639,7 @@ JaneliaRenderServiceDataUI.prototype.getStackSummaryHtml = function(ownerUrl, st
 
     var detailsQueryString = '?' + this.buildStackQueryParameters(stackId.owner, stackId.project, stackId.stack);
     //noinspection HtmlUnknownTarget
-    var detailsLinkPrefix = '<a target="_blank" href="stack-details.html' + detailsQueryString + '">';
+    var detailsLinkPrefix = '<a id="StackName" target="_blank" href="stack-details.html' + detailsQueryString + '">';
     var detailsLink = detailsLinkPrefix + stackId.stack  +'</a>';
 
     var linksHtml = '<div class="dropdown">' +

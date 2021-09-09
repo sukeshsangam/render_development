@@ -86,31 +86,6 @@ public class TileDataService {
         return tileSpec;
     }
 
-    @Path("v1/testservice")
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(
-            value = "Get test service")
-    @ApiResponses(value = {
-            @ApiResponse(code = 404, message = "test service not found"),
-    })
-    public String getTileSpec(@FormParam("clustername") final String clustername,
-                                @FormParam("username") final String username,
-                                @FormParam("password") final String password) {
-
-        LOG.info("getTestService: entry, clustername={}, username={}, password={}",
-                clustername, username, password);
-
-        //TileSpec tileSpec = null;
-        //try {
-         //   tileSpec = getTileSpec(owner, project, stack, tileId, false);
-        //} catch (final Throwable t) {
-         //   RenderServiceUtil.throwServiceException(t);
-       // }
-
-        return clustername+" "+username+" "+password;
-    }
-
 
     @Path("v1/owner/{owner}/project/{project}/stack/{stack}/tile/{tileId}")
     @DELETE
