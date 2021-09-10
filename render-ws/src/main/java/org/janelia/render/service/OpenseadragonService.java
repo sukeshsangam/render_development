@@ -84,7 +84,7 @@ public class OpenseadragonService {
         Session session;
         //String JSerror=" ";
         //String IOerror=" ";
-        String line;
+        String line="";
         try {
 
             // Open a Session to remote SSH server and Connect.
