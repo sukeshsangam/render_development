@@ -1,4 +1,4 @@
-monpackage org.janelia.render.service.dao;
+package org.janelia.render.service.dao;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.MongoClient;
