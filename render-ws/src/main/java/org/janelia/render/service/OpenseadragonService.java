@@ -102,7 +102,7 @@ public class OpenseadragonService {
             // create the execution channel over the session
             ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
             // Set the command to execute on the channel and execute the command
-            channelExec.setCommand("bsub -P test -R 'rusage[mem=6000]' -q standard 'python /home/ssangam/java_client/test.py'");
+            channelExec.setCommand("bsub -P test -R 'rusage[mem=6000]' -q standard 'python /research/sharedresources/cbi/common/derived_data_preparation_code/data_preparation.py "+stackowner+" "+stackproject+" "+stack+"'");
             channelExec.connect();
 
             // Get an InputStream from this channel and read messages, generated
