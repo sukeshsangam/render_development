@@ -127,7 +127,7 @@ public class OpenseadragonService {
         }
 
 
-        return clustername+" "+username+" "+password+" "+stackowner+" "+stackproject+" "+stack;
+        return clustername+" "+username+" "+password+" "+stackowner+" "+stackproject+" "+stack+ " "+Integer.toString(exitStatus);
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenseadragonService.class);
