@@ -82,6 +82,8 @@ public class OpenseadragonService {
                 clustername, username, password);
         JSch jsch = new JSch();
         Session session;
+        //String JSerror=" ";
+        //String IOerror=" ";
         try {
 
             // Open a Session to remote SSH server and Connect.
@@ -128,7 +130,7 @@ public class OpenseadragonService {
         }
 
 
-        return clustername+" "+username+" "+password+" "+stackowner+" "+stackproject+" "+stack+ " "+return_error;
+        return clustername+" "+username+" "+password+" "+stackowner+" "+stackproject+" "+stack+ " "+return_error+" "+line+" "+JSerror+" "+IOerror;
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenseadragonService.class);
