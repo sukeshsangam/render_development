@@ -122,6 +122,12 @@
             <version>${resteasy.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.53</version>
+        </dependency>
+
         <!--<dependency>-->
             <!--<groupId>org.jboss.resteasy</groupId>-->
             <!--<artifactId>resteasy-jaxb-provider</artifactId>-->
