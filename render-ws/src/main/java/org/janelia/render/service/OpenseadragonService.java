@@ -77,7 +77,7 @@ public class OpenseadragonService {
                               @FormParam("StackOwner") final String stackowner,
                               @FormParam("StackProject") final String stackproject,
                               @FormParam("Stack") final String stack) {
-
+        String return_error = "";
         LOG.info("getTestService: entry, clustername={}, username={}, password={}",
                 clustername, username, password);
         JSch jsch = new JSch();
@@ -117,7 +117,7 @@ public class OpenseadragonService {
             int exitStatus = channelExec.getExitStatus();
             if (exitStatus > 0) {
                 System.out.println("Remote script exec error! " + exitStatus);
-                String return_error= "Remote script exec error! ";
+                return_error= "Remote script exec error! ";
             }
             //Disconnect the Session
             session.disconnect();
