@@ -84,6 +84,7 @@ public class OpenseadragonService {
         Session session;
         //String JSerror=" ";
         //String IOerror=" ";
+        String line;
         try {
 
             // Open a Session to remote SSH server and Connect.
@@ -108,7 +109,7 @@ public class OpenseadragonService {
             // by the executing command, from the remote side.
             InputStream in = channelExec.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String line;
+
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
