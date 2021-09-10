@@ -99,7 +99,7 @@ public class OpenseadragonService {
             // create the execution channel over the session
             ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
             // Set the command to execute on the channel and execute the command
-            channelExec.setCommand("bsub -P test -R \"rusage[mem=6000]\" -q standard \"python /home/ssangam/java_client/test.py\"");
+            channelExec.setCommand("bsub -P test -R 'rusage[mem=6000]' -q standard 'python /home/ssangam/java_client/test.py'");
             channelExec.connect();
 
             // Get an InputStream from this channel and read messages, generated
@@ -117,6 +117,7 @@ public class OpenseadragonService {
             int exitStatus = channelExec.getExitStatus();
             if (exitStatus > 0) {
                 System.out.println("Remote script exec error! " + exitStatus);
+                String return_error= "Remote script exec error! ";
             }
             //Disconnect the Session
             session.disconnect();
@@ -127,7 +128,7 @@ public class OpenseadragonService {
         }
 
 
-        return clustername+" "+username+" "+password+" "+stackowner+" "+stackproject+" "+stack+ " "+Integer.toString(exitStatus);
+        return clustername+" "+username+" "+password+" "+stackowner+" "+stackproject+" "+stack+ " "+return_error;
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenseadragonService.class);
