@@ -77,6 +77,12 @@ window.onclick = function(event) {
 
 }
 
+ window.addEventListener("load", function() {
+   document.getElementById("StackOwner").value = $('#renderStackOwner option:selected').text();
+                document.getElementById("StackProject").value = $('#renderStackProject option:selected').text();
+                document.getElementById("Stack").value = $('#StackName').html();
+});
+
 
     </script>
 
@@ -180,15 +186,6 @@ window.onclick = function(event) {
             <input type="hidden" id="StackOwner" name="StackOwner">
             <input type="hidden" id="StackProject" name="StackProject" >
             <input type="hidden" id="Stack" name="Stack" >
-            <script>
-            window.addEventListener("load", function() {
-   document.getElementById("StackOwner").value = $('#renderStackOwner option:selected').text();
-                document.getElementById("StackProject").value = $('#renderStackProject option:selected').text();
-                document.getElementById("Stack").value = $('#StackName').html();
-});
-
-
-            </script>
         <input type="submit">
         </form>
     </div>
