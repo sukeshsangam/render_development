@@ -80,7 +80,51 @@ public class OpenseadragonService {
 
         LOG.info("getTestService: entry, clustername={}, username={}, password={}",
                 clustername, username, password);
+        JSch jsch = new JSch();
+        Session session;
+        try {
 
+            // Open a Session to remote SSH server and Connect.
+            // Set User and IP of the remote host and SSH port.
+            session = jsch.getSession(username, clustername, 22);
+            // When we do SSH to a remote host for the 1st time or if key at the remote host
+            // changes, we will be prompted to confirm the authenticity of remote host.
+            // This check feature is controlled by StrictHostKeyChecking ssh parameter.
+            // By default StrictHostKeyChecking  is set to yes as a security measure.
+            session.setConfig("StrictHostKeyChecking", "no");
+            //Set password
+            session.setPassword(password);
+            session.connect();
+
+            // create the execution channel over the session
+            ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
+            // Set the command to execute on the channel and execute the command
+            channelExec.setCommand("bsub -P test -R \"rusage[mem=6000]\" -q standard \"python /home/ssangam/java_client/test.py\"");
+            channelExec.connect();
+
+            // Get an InputStream from this channel and read messages, generated
+            // by the executing command, from the remote side.
+            InputStream in = channelExec.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            // Command execution completed here.
+
+            // Retrieve the exit status of the executed command
+            int exitStatus = channelExec.getExitStatus();
+            if (exitStatus > 0) {
+                System.out.println("Remote script exec error! " + exitStatus);
+            }
+            //Disconnect the Session
+            session.disconnect();
+        } catch (JSchException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         return clustername+" "+username+" "+password+" "+stackowner+" "+stackproject+" "+stack;
