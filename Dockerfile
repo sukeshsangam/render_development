@@ -72,7 +72,7 @@ RUN chown -R jetty:jetty $JETTY_BASE
 
 EXPOSE 8080
 
-ENV JAVA_OPTIONS="-Xms3g -Xmx3g -server -Djava.awt.headless=true" \
+ENV JAVA_OPTIONS="-Xms45g -Xmx45g -server -Djava.awt.headless=true" \
     JETTY_THREADPOOL_MIN_THREADS="10" \
     JETTY_THREADPOOL_MAX_THREADS="200" \
     LOG_ACCESS_ROOT_APPENDER="STDOUT" \
@@ -89,7 +89,7 @@ ENV JAVA_OPTIONS="-Xms3g -Xmx3g -server -Djava.awt.headless=true" \
     NDVIZHOST="" \
     NDVIZPORT="" \
     NDVIZ_URL="" \
-    VIEW_OPENSEADRAGON_HOST_AND_PORT="localhost:8090" \
+    VIEW_OPENSEADRAGON_HOST_AND_PORT="http://bioimg-wkst10:8080/render-ws/view/" \
     VIEW_CATMAID_HOST_AND_PORT="" \
     VIEW_DYNAMIC_RENDER_HOST_AND_PORT="" \
     VIEW_RENDER_STACK_OWNER="" \

@@ -131,7 +131,8 @@ public class OpenseadragonService {
         }
 
 
-        return clustername+" "+username+" "+password+" "+stackowner+" "+stackproject+" "+stack+ " "+return_error+" "+line;
+        //return clustername+" "+username+" "+password+" "+stackowner+" "+stackproject+" "+stack+ " "+return_error+" "+line;
+        return line;
     }
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenseadragonService.class);

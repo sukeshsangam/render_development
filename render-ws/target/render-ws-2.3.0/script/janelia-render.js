@@ -650,13 +650,13 @@ JaneliaRenderServiceDataUI.prototype.getStackSummaryHtml = function(ownerUrl, st
     if (this.isOpenseadragonHostDefined()) {
             var openseadragonBaseUrl = 'http://' + this.openseadragonHost;
             //var openseadragonUrl = this.util.getCenteredCatmaidUrl(openseadragonBaseUrl, stackId, version, bounds, bounds.minZ, 8);
-            var openseadragonUrl = 'openseadragon.html?'
+            var openseadragonUrl = 'openseadragon.html?owner='+stackId.owner+'&project='+stackId.project+'&stack='+stackId.stack+'&z='+(bounds.maxZ-bounds.minZ);
             if(!("OpenseadragonData" in stackInfo)){
 
                 // linksHtml = linksHtml + ' <a target="_blank" href="' + openseadragonUrl + '">Prepare data for Openseadragon</a>';
-               // linksHtml = linksHtml + '<a href="" class="btn" onclick="return check()">Prepare Data for Openseadragon</a>';
-                  //  linksHtml = linksHtml + '<button id="myBtn" onclick="testing();">Prepare data for openseadragon</button>';
-                   linksHtml = linksHtml + ' <a target="_blank" href="' + openseadragonUrl + '">Openseadragon Test</a>';
+               //linksHtml = linksHtml + '<a href="" class="btn" onclick="return check()">Prepare Data for Openseadragon</a>';
+                    linksHtml = linksHtml + '<button id="myBtn" onclick="testing();">Prepare data for openseadragon</button>';
+                  linksHtml = linksHtml + ' <a target="_blank" href="' + openseadragonUrl + '">Openseadragon</a>';
             }
             else{
                 linksHtml = linksHtml + ' <a target="_blank" href="' + openseadragonUrl + '">Openseadragon</a>';
