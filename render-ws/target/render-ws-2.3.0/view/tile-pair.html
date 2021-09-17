@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tile Pair Point Matches</title>
+
+    <link rel="stylesheet" href="../css/match.css">
+
+    <script type="text/javascript" src="../script/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../script/janelia-render.js?v=20180611_001"></script>
+    <script type="text/javascript" src="../script/janelia-tile-neighbors.js?v=20190208_001"></script>
+    <script type="text/javascript">
+
+        var tilePair;
+
+        $( document ).ready(function() {
+
+            var util = new JaneliaScriptUtilities();
+            var queryParameters = new JaneliaQueryParameters();
+
+            var baseUrl = queryParameters.get('baseUrl', util.getServicesBaseUrl());
+
+            var owner = queryParameters.get('renderStackOwner');
+            var project = queryParameters.get('renderStackProject', '');
+            var stack = queryParameters.get('renderStack');
+
+            var matchOwner = queryParameters.get('matchOwner');
+            var matchCollection = queryParameters.get('matchCollection');
+
+            // Until we've stored the point match render context properly,
+            // you may need to hack these parameters to match your setup.
+            var keyToDefaultRenderParametersMap = {
+                'DEFAULT': {'excludeMask' : 'true', 'normalizeForMatching' : 'true'},
+                'FAFB': {'excludeMask' : 'true', 'normalizeForMatching' : 'true', 'width' : 2760, 'height' : 2330},
+                'HIER_CANVAS': {'filter' : 'true'},
+                'ALLEN_AT': {'normalizeForMatching' : 'true', 'minIntensity' : 0, 'maxIntensity' : 10000 }
+            };
+
+            var defaultKey = 'DEFAULT';
+            if (project.includes('FAFB') || (project === 'ackermand') || (project === 'fly_pilot')) {
+                defaultKey = 'FAFB';
+            }
+            var renderParametersKey = queryParameters.get('renderParametersKey', defaultKey);
+
+            var renderQueryParameters = keyToDefaultRenderParametersMap[renderParametersKey];
+            
+            // Allow query string overrides of standard render flags
+            var renderFlags = ["excludeMask", "normalizeForMatching", "filter", "minIntensity", "maxIntensity"];
+            renderFlags.forEach(flag => {
+                var value = queryParameters.get(flag);
+                if (typeof value !== 'undefined') {
+                    renderQueryParameters[flag] = value;
+                }
+            });
+
+            var renderQueryParameterString = $.param(renderQueryParameters);
+
+            var defaultRenderScale = 0.15;
+            var renderScale = queryParameters.get('renderScale', defaultRenderScale);
+
+            var canvas = document.getElementById("theCanvas");
+
+            tilePair = new JaneliaTileWithNeighbors(
+                    baseUrl, owner, project, stack,
+                    matchOwner, matchCollection,
+                    renderQueryParameterString, renderScale, canvas);
+
+            var tileId = queryParameters.get('pId');
+            var otherTileId = queryParameters.get('qId');
+            tilePair.setTilePair(tileId, otherTileId);
+
+            var sep = '&nbsp;&nbsp;&nbsp;&nbsp;';
+
+            $("#renderStack").html(tilePair.owner + sep + tilePair.project + sep + tilePair.stack);
+
+            var stackLinkHtml = '(<a href="' + tilePair.stackUrl + '" target="_blank">stack metadata</a>)';
+            $("#renderStackLink").html(stackLinkHtml);
+            $("#matchCollection").html(tilePair.matchOwner + sep + tilePair.matchCollection);
+
+        });
+
+    </script>
+
+</head>
+<body>
+
+<h3>Tile Pair Point Matches</h3>
+
+<span id="message" class="error"></span>
+
+<div id="headerDiv" class="header_div">
+    <table class="data_table">
+        <tr>
+            <td>Render Stack:</td>
+            <td id="renderStack"></td>
+            <td id="renderStackLink"></td>
+        </tr>
+        <tr>
+            <td>Match Collection:</td>
+            <td id="matchCollection"></td>
+            <td id="pairMatchesLink"></td>
+        </tr>
+        <tr>
+            <td>Tile IDs:</td>
+            <td id="pTileId"></td>
+            <td id="qTileId"></td>
+        </tr>
+        <tr>
+            <td>Match View:</td>
+            <td>
+                <input type='button' value='All' onclick='tilePair.drawAllMatches()' />
+                <input type='button' value='Previous' onclick='tilePair.drawMatch(-1)' />
+                <input type='button' value='Next' onclick='tilePair.drawMatch(1)' />
+                <input id='toggleLinesAndPoints' type='button' value='Points' onclick='tilePair.toggleLinesAndPoints()' />
+                <input type='button' value='Rotate Tiles' onclick='tilePair.rotatePair()' />
+            </td>
+            <td id="matchInfo"></td>
+        </tr>
+    </table>
+</div>
+
+<div id="tileDiv">
+    <canvas id="theCanvas"></canvas>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+    <display-name>Render Web Services</display-name>
+
+    <!--
+         For RESTEasy configuration documentation, see
+         http://docs.jboss.org/resteasy/docs/3.0.7.Final/userguide/html/Installation_Configuration.html#d4e125
+    -->
+
+    <!-- URL based negotiation -->
+    <context-param>
+        <param-name>resteasy.media.type.mappings</param-name>
+        <!-- needed to remove json mapping here for swagger because ApiListingResource is explicitly mapped to /swagger.json -->
+        <param-value>html : text/html</param-value>
+    </context-param>
+
+    <!--
+         Use Jetty filter to support cross origin requests.
+         Filter documentation can be found here:
+         http://www.eclipse.org/jetty/documentation/current/cross-origin-filter.html
+
+         Default parameters should be sufficient unless you want to lock down access to specific origins.
+         Uncomment <init-param> blocks below to configure as needed.
+
+         Note that to use the filter, the Jetty servlets module must also be enabled in start.d/servlets.ini
+    -->
+    <filter>
+        <filter-name>cross-origin</filter-name>
+        <filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class>
+        <!--
+        <init-param>
+            <param-name>allowedOrigins</param-name>
+            <param-value>*</param-value>
+        </init-param>
+        -->
+        <init-param>
+            <param-name>allowedMethods</param-name>
+            <param-value>GET,POST,PUT,OPTIONS,HEAD</param-value>
+        </init-param>
+        <!--
+        <init-param>
+            <param-name>allowedHeaders</param-name>
+            <param-value>X-Requested-With,Content-Type,Accept,Origin</param-value>
+        </init-param>
+        <init-param>
+            <param-name>preflightMaxAge</param-name>
+            <param-value>1800</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowCredentials</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>exposeHeaders</param-name>
+            <param-value></param-value>
+        </init-param>
+        -->
+        <init-param>
+            <param-name>chainPreflight</param-name>
+            <param-value>false</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>cross-origin</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>Default</servlet-name>
+        <servlet-class>
+            org.eclipse.jetty.servlet.DefaultServlet
+        </servlet-class>
+    </servlet>
+
+    <servlet>
+        <!--suppress ServletWithoutMappingInspection -->
+        <servlet-name>SwaggerBootstrap</servlet-name>
+        <servlet-class>org.janelia.render.service.swagger.SwaggerBootstrapServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Default</servlet-name>
+        <url-pattern>/css/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Default</servlet-name>
+        <url-pattern>/script/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Default</servlet-name>
+        <url-pattern>/view/*</url-pattern>
+    </servlet-mapping>
+
+</web-app>
