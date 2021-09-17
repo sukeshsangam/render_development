@@ -51,10 +51,11 @@ var url = new URL(window.location.href);
 var owner = url.searchParams.get("owner");
 var project = url.searchParams.get("project");
 var stack = url.searchParams.get("stack");
-var z = url.searchParams.get("z");
-var $i = "1";
+var minz = url.searchParams.get("minz");
+var maxz = url.searchParams.get("maxz");
+//var $i = "1";
 var arr = [];
-for (var i = 1; i < parseInt(z)+1; i++) {
+for (var i = parseInt(minz); i < parseInt(maxz)+1; i++) {
     arr.push('http://bioimg-wkst10:5000/sharedresources/cbi/common/derived_data_for_visualization/derived_perm/openseadragon/'+owner+'/'+project+'/'+stack+'/'+owner+'_'+project+'_'+stack+'_'+i+'.jpg.dzi');
 }
 var viewer = OpenSeadragon({
