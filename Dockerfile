@@ -33,7 +33,7 @@ COPY . /var/www/render/
 RUN mvn clean
 
 # use -T 1C option to multi-thread maven, using 1 thread per available core
-RUN mvn -T 1C -Dproject.build.sourceEncoding=UTF-8 package && \
+RUN mvn -T 1C -Dproject.build.sourceEncoding=UTF-8 -Dmaven.test.skip=true package && \
     mkdir -p /root/render-lib && \
     mv */target/*.*ar /root/render-lib && \
     printf "\nsaved the following build artifacts:\n\n" && \
@@ -69,7 +69,7 @@ RUN ls -al $JETTY_BASE/* && \
 COPY --from=builder /root/render-lib/render-ws-*.war webapps/render-ws.war
 COPY render-ws/src/main/scripts/docker /render-docker
 RUN chown -R jetty:jetty $JETTY_BASE 
-
+RUN chmod -R 777 $JETTY_BASE
 EXPOSE 8080
 
 ENV JAVA_OPTIONS="-Xms45g -Xmx45g -server -Djava.awt.headless=true" \
@@ -89,7 +89,7 @@ ENV JAVA_OPTIONS="-Xms45g -Xmx45g -server -Djava.awt.headless=true" \
     NDVIZHOST="" \
     NDVIZPORT="" \
     NDVIZ_URL="" \
-    VIEW_OPENSEADRAGON_HOST_AND_PORT="http://bioimg-wkst10:8080/render-ws/view/" \
+    VIEW_OPENSEADRAGON_HOST_AND_PORT="http://bioimg-wkst10:8080/render-ws/view/openseadragon.html" \
     VIEW_CATMAID_HOST_AND_PORT="" \
     VIEW_DYNAMIC_RENDER_HOST_AND_PORT="" \
     VIEW_RENDER_STACK_OWNER="" \
