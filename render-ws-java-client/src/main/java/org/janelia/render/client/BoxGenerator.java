@@ -218,6 +218,7 @@ public class BoxGenerator implements Serializable {
         BoxMipmapGenerator boxMipmapGenerator = new BoxMipmapGenerator(z.intValue(),
                                                                        boxParameters.label,
                                                                        format,
+                                                                       boxParameters.isConvertToGray(),
                                                                        boxWidth,
                                                                        boxHeight,
                                                                        boxDirectory,
@@ -413,8 +414,8 @@ public class BoxGenerator implements Serializable {
 
             BoxMipmapGenerator.saveImage(levelZeroImage,
                                          levelZeroFile,
-                                         boxParameters.label,
-                                         format);
+                                         format,
+                                         boxParameters.isConvertToGray());
 
             boxMipmapGenerator.addSource(row, column, levelZeroFile);
 

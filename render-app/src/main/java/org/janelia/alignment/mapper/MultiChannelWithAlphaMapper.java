@@ -50,8 +50,8 @@ public class MultiChannelWithAlphaMapper
                     final int targetX,
                     final int targetY) {
 
-        final int roundedSourceX = (int) Math.round(sourceX);
-        final int roundedSourceY = (int) Math.round(sourceY);
+        final int roundedSourceX = (int) (sourceX + 0.5f);
+        final int roundedSourceY = (int) (sourceY + 0.5f);
 
         ImageProcessorWithMasks normalizedSource;
         for (int i = 0; i < normalizedSourceList.size(); i++) {
@@ -60,8 +60,8 @@ public class MultiChannelWithAlphaMapper
                                 targetY,
                                 targetList.get(i),
                                 targetMaxMaskIntensityList.get(i),
-                                normalizedSource.ip.getf(roundedSourceX, roundedSourceY),
-                                normalizedSource.mask.getf(roundedSourceX, roundedSourceY),
+                                normalizedSource.ip.get(roundedSourceX, roundedSourceY),
+                                normalizedSource.mask.get(roundedSourceX, roundedSourceY),
                                 sourceMaxMaskIntensityList.get(i));
         }
 
@@ -80,8 +80,8 @@ public class MultiChannelWithAlphaMapper
                                 targetY,
                                 targetList.get(i),
                                 targetMaxMaskIntensityList.get(i),
-                                normalizedSource.ip.getInterpolatedPixel(sourceX, sourceY),
-                                normalizedSource.mask.getInterpolatedPixel(sourceX, sourceY),
+                                normalizedSource.ip.getPixelInterpolated(sourceX, sourceY),
+                                normalizedSource.mask.getPixelInterpolated(sourceX, sourceY),
                                 sourceMaxMaskIntensityList.get(i));
         }
     }
@@ -90,13 +90,13 @@ public class MultiChannelWithAlphaMapper
                                     final int targetY,
                                     final ImageProcessorWithMasks target,
                                     final double targetMaxMaskIntensity,
-                                    final double sourceIntensity,
-                                    final double sourceMaskIntensity,
+                                    final int sourceIntensity,
+                                    final int sourceMaskIntensity,
                                     final double sourceMaxMaskIntensity) {
 
         final double sourceAlpha = sourceMaskIntensity / sourceMaxMaskIntensity;
-        final double targetIntensity = target.ip.getf(targetX, targetY);
-        final double targetAlpha = target.mask.getf(targetX, targetY) / targetMaxMaskIntensity;
+        final int targetIntensity = target.ip.get(targetX, targetY);
+        final double targetAlpha = target.mask.get(targetX, targetY) / targetMaxMaskIntensity;
 
         final double[] blendedIntensityAndAlpha =
                 SingleChannelWithAlphaMapper.getBlendedIntensityAndAlpha(sourceIntensity,

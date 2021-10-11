@@ -24,13 +24,13 @@ public class MultiChannelWithBinaryMaskMapper
                                     final int targetY,
                                     final ImageProcessorWithMasks target,
                                     final double targetMaxMaskIntensity,
-                                    final double sourceIntensity,
-                                    final double sourceMaskIntensity,
+                                    final int sourceIntensity,
+                                    final int sourceMaskIntensity,
                                     final double sourceMaxMaskIntensity) {
 
         if (sourceMaskIntensity > 0.0) {
-            target.ip.setf(targetX, targetY, (float) sourceIntensity);
-            target.mask.setf(targetX, targetY, (float) targetMaxMaskIntensity);
+            target.ip.set(targetX, targetY, sourceIntensity);
+            target.mask.set(targetX, targetY, (int) targetMaxMaskIntensity);
         }
     }
 

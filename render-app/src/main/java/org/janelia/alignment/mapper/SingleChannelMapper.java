@@ -54,10 +54,10 @@ public class SingleChannelMapper
                     final int targetX,
                     final int targetY) {
 
-        final int roundedSourceX = (int) Math.round(sourceX);
-        final int roundedSourceY = (int) Math.round(sourceY);
+        final int roundedSourceX = (int) (sourceX + 0.5f);
+        final int roundedSourceY = (int) (sourceY + 0.5f);
 
-        target.ip.setf(targetX, targetY, normalizedSource.ip.getf(roundedSourceX, roundedSourceY));
+        target.ip.set(targetX, targetY, normalizedSource.ip.get(roundedSourceX, roundedSourceY));
     }
 
     @Override
@@ -66,7 +66,7 @@ public class SingleChannelMapper
                                 final int targetX,
                                 final int targetY) {
 
-        target.ip.setf(targetX, targetY, (float) normalizedSource.ip.getInterpolatedPixel(sourceX, sourceY));
+        target.ip.set(targetX, targetY, normalizedSource.ip.getPixelInterpolated(sourceX, sourceY));
     }
 
     public static ImageProcessorWithMasks normalizeSourceForTarget(final ImageProcessorWithMasks source,
@@ -75,7 +75,9 @@ public class SingleChannelMapper
 
         final ImageProcessorWithMasks normalizedSource;
 
-        if (target instanceof ByteProcessor) {
+        if (target.getClass().equals(source.ip.getClass())) {
+            normalizedSource = source; // no need to normalize
+        } else if (target instanceof ByteProcessor) {
             normalizedSource =
                     new ImageProcessorWithMasks(source.ip.convertToByteProcessor(),
                                                 source.mask,

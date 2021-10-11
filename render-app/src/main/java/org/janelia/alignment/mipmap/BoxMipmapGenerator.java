@@ -20,6 +20,7 @@ import org.janelia.alignment.LabelRenderer;
 import org.janelia.alignment.RenderParameters;
 import org.janelia.alignment.Utils;
 import org.janelia.alignment.spec.Bounds;
+import org.janelia.alignment.util.FileUtil;
 import org.janelia.alignment.util.ImageProcessorCache;
 import org.janelia.alignment.util.LabelImageProcessorCache;
 import org.slf4j.Logger;
@@ -52,6 +53,7 @@ public class BoxMipmapGenerator {
     private final int z;
     private final boolean isLabel;
     private final String format;
+    private final boolean convertToGray;
     private final int boxWidth;
     private final int boxHeight;
     private final File boxDirectory;
@@ -71,6 +73,7 @@ public class BoxMipmapGenerator {
      * @param  z                 z value for the layer being processed.
      * @param  isLabel           indicates that the images are labels and not standard images.
      * @param  format            format of all generated image files.
+     * @param  convertToGray     indicates that output images should be converted to grayscale.
      * @param  boxWidth          width for all generated image files.
      * @param  boxHeight         height for all generated image files.
      * @param  boxDirectory      parent directory for all generated image files.
@@ -83,6 +86,7 @@ public class BoxMipmapGenerator {
     public BoxMipmapGenerator(final int z,
                               final boolean isLabel,
                               final String format,
+                              final boolean convertToGray,
                               final int boxWidth,
                               final int boxHeight,
                               final File boxDirectory,
@@ -95,6 +99,7 @@ public class BoxMipmapGenerator {
         this.z = z;
         this.isLabel = isLabel;
         this.format = format;
+        this.convertToGray = convertToGray;
         this.boxWidth = boxWidth;
         this.boxHeight = boxHeight;
         this.boxDirectory = boxDirectory;
@@ -165,6 +170,7 @@ public class BoxMipmapGenerator {
         final BoxMipmapGenerator nextLevelGenerator =  new BoxMipmapGenerator(z,
                                                                               isLabel,
                                                                               format,
+                                                                              convertToGray,
                                                                               boxWidth,
                                                                               boxHeight,
                                                                               boxDirectory,
@@ -294,7 +300,7 @@ public class BoxMipmapGenerator {
 
         } else {
             LOG.info("generateOverview: skipping generation, z={}, sourceLevel={}, lastSourceRow={}, lastSourceColumn={}",
-                     z, sourceLevel, lastSourceRow, lastSourceColumn, z);
+                     z, sourceLevel, lastSourceRow, lastSourceColumn);
         }
 
         return isGenerated;
@@ -356,27 +362,23 @@ public class BoxMipmapGenerator {
     /**
      * Utility to save an image.
      *
-     * @param  image         image to save.
-     * @param  imageFile     file for image.
-     * @param  isLabel       indicates that the image is a label and not a standard image.
-     * @param  format        format in which to save the image.
+     * @param  image          image to save.
+     * @param  imageFile      file for image.
+     * @param  format         format in which to save the image.
+     * @param  convertToGray  indicates whether the image should be converted to grayscale.
      *
      * @throws IOException
      *   if the image cannot be saved for any reason.
      */
     public static void saveImage(final BufferedImage image,
                                  final File imageFile,
-                                 final boolean isLabel,
-                                 final String format)
+                                 final String format,
+                                 final String convertToGray)
             throws IOException {
 
         makeDirectories(imageFile.getCanonicalFile());
 
-        if (isLabel) {
-            Utils.saveImage(image, imageFile.getAbsolutePath(), format, false, 0.85f);
-        } else {
-            Utils.saveImage(image, imageFile.getAbsolutePath(), format, true, 0.85f);
-        }
+        Utils.saveImage(image, imageFile.getAbsolutePath(), format, convertToGray, 0.85f);
     }
 
     /**
@@ -464,7 +466,7 @@ public class BoxMipmapGenerator {
             final ImageProcessor downSampledImageProcessor =
                     Downsampler.downsampleImageProcessor(fourTileImagePlus.getProcessor());
 
-            saveImage(downSampledImageProcessor.getBufferedImage(), scaledFile, isLabel, format);
+            saveImage(downSampledImageProcessor.getBufferedImage(), scaledFile, format, convertToGray);
 
             fourTileGraphics.dispose();
         }

@@ -31,6 +31,7 @@ import org.janelia.alignment.RenderParameters;
 import org.janelia.alignment.util.FileUtil;
 import org.janelia.alignment.Utils;
 import org.janelia.alignment.spec.Bounds;
+import org.janelia.alignment.util.FileUtil;
 import org.janelia.alignment.util.LabelImageProcessorCache;
 import org.junit.After;
 import org.junit.Assert;
@@ -96,6 +97,7 @@ public class BoxMipmapGeneratorTest {
         BoxMipmapGenerator boxMipmapGenerator = new BoxMipmapGenerator(z,
                                                                        false,
                                                                        Utils.PNG_FORMAT,
+                                                                       true,
                                                                        boxWidth,
                                                                        boxHeight,
                                                                        boxDirectory,
@@ -184,7 +186,8 @@ public class BoxMipmapGeneratorTest {
         BoxMipmapGenerator.saveImage(argbLabelImage,
                                      outputFile,
                                      true,
-                                     Utils.PNG_FORMAT);
+                                     Utils.PNG_FORMAT,
+                                     false);
 
         Assert.assertTrue("missing label image " + outputFile.getAbsolutePath(), outputFile.exists());
 
