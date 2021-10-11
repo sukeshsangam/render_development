@@ -125,7 +125,7 @@ public class MaterializedBoxParameters implements Serializable {
 
     public boolean isConvertToGray() {
         return (! label) && convertToGray;
-    }
+    }:q
 
     public boolean isOverviewNeeded() {
         return ((maxOverviewWidthAndHeight != null) && (maxOverviewWidthAndHeight > 0));
