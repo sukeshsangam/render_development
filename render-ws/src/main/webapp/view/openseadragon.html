@@ -78,15 +78,9 @@ $('#index_no').text(viewer._sequenceIndex+1);
 
   $(document).on('keypress',function(e) {
     if(e.which == 60) {
-        viewer.goToPage(viewer._sequenceIndex-10);
-    }
-    if(e.which == 62){
-        viewer.goToPage(viewer._sequenceIndex+10);
-    }
-    if(e.which == 44){
         viewer.goToPage(viewer._sequenceIndex-1);
     }
-    if(e.which == 46){
+    if(e.which == 62){
         viewer.goToPage(viewer._sequenceIndex+1);
     }
 
